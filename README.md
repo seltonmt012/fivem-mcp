@@ -1,29 +1,75 @@
 # fivem-mcp
 
-Develop FiveM resources from Claude and test them inside the running game.
+**Develop FiveM resources from Claude — and test them inside the running game.**
 
-Claude gets a bridge into a live FiveM client: it can run console commands, execute Lua in the
-client context, read the client log and look up natives — the things you would otherwise do by
-hand in the F8 console, except an agent can do them in a loop.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Node.js ≥ 20](https://img.shields.io/badge/Node.js-%E2%89%A5%2020-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![MCP](https://img.shields.io/badge/Model%20Context%20Protocol-server-8A2BE2)](https://modelcontextprotocol.io/)
+
+Claude gets a bridge into a live FiveM client: it can run console commands, execute Lua in
+the client context, read the client log and look up natives — the things you would otherwise
+do by hand in the F8 console, except an agent can do them in a loop.
+
+> [!IMPORTANT]
+> **This is a local development tool.** The bridge listens on loopback only, and the client
+> code is delivered at runtime to authorized developers alone. See [Security](#security).
 
 ## Demo
 
 One prompt to Claude, and it scaffolds a shop resource, deploys it to the server, walks the
 player over and buys a bottle of water in-game — verifying every step through the bridge:
 
-
-
 https://github.com/user-attachments/assets/038029e4-3e48-4cbc-b58a-8433d2725d90
 
-Prompt that was used for the demo:
+<details>
+<summary><b>The prompt used for the demo</b></summary>
+
 ```
 Build a production-quality FiveM shop resource where players can purchase water. First inspect the existing server setup and integrate with its framework, inventory, and currency systems where available. Create a polished, responsive NUI that works correctly across common screen resolutions and aspect ratios.
 
 Deploy the resource, test the complete purchase flow in the running game, verify the UI at multiple viewport sizes, inspect client and server logs, and fix every issue you encounter. Ensure purchases are validated server-side, prevent exploits and duplicate transactions, and remove all temporary test code before finishing. Provide brief runtime evidence showing that the final implementation works.
 ```
 
-**A local development tool.** The bridge listens on loopback only, and the client code is
-delivered at runtime to authorized developers alone. See [Security](#security).
+</details>
+
+## Table of contents
+
+- [Highlights](#highlights)
+- [Tools](#tools)
+- [Getting started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [1. Install the MCP server](#1-install-the-mcp-server)
+  - [2. Register the server with Claude Code](#2-register-the-server-with-claude-code)
+  - [3. Install the bridge resource into your FXServer](#3-install-the-bridge-resource-into-your-fxserver)
+  - [4. Authorize yourself](#4-authorize-yourself)
+  - [5. Optional configuration](#5-optional-configuration)
+  - [6. Verify](#6-verify)
+- [Platform support](#platform-support)
+- [Architecture](#architecture)
+- [Repository layout](#repository-layout)
+- [Security](#security)
+- [Documentation](#documentation)
+- [Licence](#licence)
+
+## Highlights
+
+- **Full dev loop in-game** — launch the client, deploy a resource, drive the player,
+  read logs and screenshots, all from the agent.
+- **Native checking before execution** — every native a snippet calls is resolved against
+  the FiveM reference *and* the connected client. An invented name comes back as a rejection
+  with suggestions instead of failing mid-run as `attempt to call a nil value`.
+  Details: [Native checking](mcp-server/README.md#native-checking).
+- **NUI testing without OS input** — list frames, snapshot a resource's UI, click elements
+  and run JavaScript through CEF DevTools.
+- **Server side too (opt-in)** — read the FXServer console and run commands through txAdmin,
+  or execute Lua on the server itself.
+- **Static linting on disk** — `fivem_check_resource` checks syntax and resolves every
+  native call side-aware before anything is deployed.
+- **A ready-made agent skill** — [`fivem-script-dev`](.claude/skills/fivem-script-dev/SKILL.md)
+  teaches Claude Code the full pipeline: prototype natives live, scaffold a resource under
+  `scripts/`, deploy, and verify every step in the running game. It also keeps memory across
+  sessions: portable lessons in a committed file, machine facts (server paths, addresses) in a
+  gitignored one — with a test-suite check that the two never mix.
 
 ## Tools
 
@@ -44,6 +90,9 @@ delivered at runtime to authorized developers alone. See [Security](#security).
 | `fivem_nui_frames` / `fivem_nui_snapshot` | Lists NUI frames and outlines a resource's UI (optionally with a privacy-safe screenshot of just the NUI layer) |
 | `fivem_nui_click` / `fivem_nui_eval` | Clicks elements and runs JavaScript inside a resource's NUI page through CEF DevTools — no OS-level input needed |
 
+<details>
+<summary><b>Which tools need a connected client?</b></summary>
+
 Not every tool needs a connected client. `fivem_screenshot`, `fivem_launch` and
 `fivem_read_crash` work from the MCP server itself and never talk to the resource, so they work
 while the bridge is down — on a crash dialog, a stuck loading screen, the launcher, or with
@@ -53,31 +102,22 @@ server-side tools bypass the client too: `fivem_server_console` and `fivem_serve
 to txAdmin (off by default, dedicated admin account required — setup in
 [Server console via txAdmin](mcp-server/README.md#server-console-via-txadmin)), and
 `fivem_server_run_code` posts to the FXServer itself (opt-in on both sides). Everything else in
-that table needs a connected client.
+the table needs a connected client.
 
-Before a snippet reaches the game, **every native it calls is resolved** against the FiveM
-native reference *and* against the connected client. An invented name comes back as a
-rejection with suggestions instead of failing mid-run as `attempt to call a nil value`.
-Details: [Native checking](mcp-server/README.md#native-checking).
+</details>
 
-The repo also ships a Claude Code skill,
-[`fivem-script-dev`](.claude/skills/fivem-script-dev/SKILL.md), that teaches the agent the full
-scripting pipeline — prototype natives live with `fivem_run_code`, scaffold a resource under
-`scripts/`, deploy it, and verify every step in the running game. The skill also keeps
-memory across sessions: portable lessons in a committed file, machine facts (server paths,
-addresses) in a gitignored one — with a test-suite check that the two never mix.
+Full parameter reference for every tool: [mcp-server/README.md](mcp-server/README.md#tools).
 
-## Setup
+## Getting started
 
 ### Prerequisites
 
-- **Node.js 20 or newer** — runs the MCP server.
-- **The FiveM client** (Windows) — the game you develop against. It must run on the same
-  machine as the MCP server; the bridge is loopback-only by design.
-- **An FXServer to test against** — your own development server, local or remote, Windows or
-  Linux. A [txAdmin](https://txadmin.gg/) install works out of the box; txAdmin itself is only
-  required for the two opt-in `fivem_server_*` tools.
-- **Claude Code** (or any other MCP client).
+| Requirement | Notes |
+|---|---|
+| **Node.js 20 or newer** | Runs the MCP server |
+| **The FiveM client** (Windows) | The game you develop against. Must run on the **same machine** as the MCP server — the bridge is loopback-only by design |
+| **An FXServer to test against** | Your own development server, local or remote, Windows or Linux. A [txAdmin](https://txadmin.gg/) install works out of the box; txAdmin itself is only required for the two opt-in `fivem_server_*` tools |
+| **Claude Code** | Or any other MCP client |
 
 ### 1. Install the MCP server
 
@@ -146,11 +186,13 @@ npm test
 
 Then the real thing: start your FXServer, ask Claude to launch the game (`fivem_launch`) or
 start FiveM and connect yourself, and ask for `fivem_bridge_status` — it should report a
-connected client within seconds of reaching the session. If it does not, the FiveM server
-console logs every rejected payload request with the reason, and there is a
-[troubleshooting table](mcp-server/README.md#troubleshooting).
+connected client within seconds of reaching the session.
 
-### Platform support
+> [!TIP]
+> If no client connects, the FiveM server console logs every rejected payload request with the
+> reason, and there is a [troubleshooting table](mcp-server/README.md#troubleshooting).
+
+## Platform support
 
 | Part | Where it runs |
 |---|---|
@@ -162,14 +204,6 @@ On a non-Windows host, `fivem_screenshot`, `fivem_launch` and the client log/cra
 have nothing local to work with — they stay registered and answer with the reason instead of
 failing cryptically. For a remote game server, see the
 [token note](mcp-server/README.md#the-game-side) (`FIVEM_BRIDGE_TOKEN`).
-
-## Components
-
-| Folder | What is in it |
-|---|---|
-| [`mcp-server/`](mcp-server) | The MCP server (TypeScript/Node). Hosts the local WebSocket bridge and exposes the tools to Claude. Docs: [mcp-server/README.md](mcp-server/README.md) |
-| [`fivem-mcp-bridge/`](fivem-mcp-bridge) | The game side. Player clients only ever receive a loader; the real client code is sent by the server to registered developers only. Docs: [fivem-mcp-bridge/README.md](fivem-mcp-bridge/README.md) |
-| [`scripts/`](scripts) | Where the resources you develop with the agent live; each is linked into the server like the bridge. Docs: [scripts/README.md](scripts/README.md) |
 
 ## Architecture
 
@@ -188,12 +222,30 @@ The resource's client code is not shipped with it. It is sent at runtime by the 
 authorized developers and executed there with `load()`. Details in
 [fivem-mcp-bridge/README.md](fivem-mcp-bridge/README.md).
 
+## Repository layout
+
+| Folder | What is in it |
+|---|---|
+| [`mcp-server/`](mcp-server) | The MCP server (TypeScript/Node). Hosts the local WebSocket bridge and exposes the tools to Claude |
+| [`fivem-mcp-bridge/`](fivem-mcp-bridge) | The game side. Player clients only ever receive a loader; the real client code is sent by the server to registered developers only |
+| [`scripts/`](scripts) | Where the resources you develop with the agent live; each is linked into the server like the bridge |
+
 ## Security
 
 The bridge runs on loopback only, and the payload goes exclusively to players listed in
 `fivem-mcp-bridge/authorized.txt` (or authorized via ACE). That reduces the
 attack surface but is no substitute for trusting your own team — see
 [Trust model](fivem-mcp-bridge/README.md#trust-model) in the resource docs.
+
+## Documentation
+
+- [MCP server](mcp-server/README.md) — tool parameter reference, configuration, native
+  checking, txAdmin setup, troubleshooting
+- [Bridge resource](fivem-mcp-bridge/README.md) — game-side setup, authorization, trust model
+- [Developed resources](scripts/README.md) — how agent-built resources are laid out and linked
+- [`fivem-script-dev` skill](.claude/skills/fivem-script-dev/SKILL.md) — the agent workflow,
+  plus [portable lessons](.claude/skills/fivem-script-dev/references/lessons.md) accumulated
+  across sessions
 
 ## Licence
 
@@ -206,4 +258,3 @@ builds from the FiveM native reference. That documentation comes from
 is subject to their [terms](https://fivem.net/terms). It is committed for convenience — so a
 clone works offline — but it remains their content under their terms, not part of the MIT
 grant.
-
