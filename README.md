@@ -16,7 +16,7 @@ player over and buys a bottle of water in-game — verifying every step through 
 https://github.com/user-attachments/assets/038029e4-3e48-4cbc-b58a-8433d2725d90
 
 Prompt that was used for the demo:
-```bash
+```
 Build a production-quality FiveM shop resource where players can purchase water. First inspect the existing server setup and integrate with its framework, inventory, and currency systems where available. Create a polished, responsive NUI that works correctly across common screen resolutions and aspect ratios.
 
 Deploy the resource, test the complete purchase flow in the running game, verify the UI at multiple viewport sizes, inspect client and server logs, and fix every issue you encounter. Ensure purchases are validated server-side, prevent exploits and duplicate transactions, and remove all temporary test code before finishing. Provide brief runtime evidence showing that the final implementation works.
