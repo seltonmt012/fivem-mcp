@@ -11,11 +11,16 @@ hand in the F8 console, except an agent can do them in a loop.
 One prompt to Claude, and it scaffolds a shop resource, deploys it to the server, walks the
 player over and buys a bottle of water in-game — verifying every step through the bridge:
 
-<!-- For an inline player: edit this README on github.com and drag demo.mp4 into the editor;
-     GitHub hosts it and renders a player. Until then the poster links to the committed video. -->
-[![Demo: Claude builds and tests a FiveM resource live in-game](docs/demo-poster.jpg)](docs/demo.mp4)
 
-*Click to watch ([docs/demo.mp4](docs/demo.mp4), 70 s).*
+
+https://github.com/user-attachments/assets/038029e4-3e48-4cbc-b58a-8433d2725d90
+
+Prompt that was used for the demo:
+```bash
+Build a production-quality FiveM shop resource where players can purchase water. First inspect the existing server setup and integrate with its framework, inventory, and currency systems where available. Create a polished, responsive NUI that works correctly across common screen resolutions and aspect ratios.
+
+Deploy the resource, test the complete purchase flow in the running game, verify the UI at multiple viewport sizes, inspect client and server logs, and fix every issue you encounter. Ensure purchases are validated server-side, prevent exploits and duplicate transactions, and remove all temporary test code before finishing. Provide brief runtime evidence showing that the final implementation works.
+```
 
 **A local development tool.** The bridge listens on loopback only, and the client code is
 delivered at runtime to authorized developers alone. See [Security](#security).
