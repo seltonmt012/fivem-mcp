@@ -1,0 +1,24 @@
+node_modules/
+dist/
+# Personal Claude Code overrides stay local; the rest of .claude/ (skills) is
+# shared project config and belongs in the repo.
+.claude/settings.local.json
+.fivem-mcp/
+fivem-mcp.config.json
+bridge.token
+# Real developer identifiers for the bridge payload; see fivem-mcp-bridge/README.md.
+fivem-mcp-bridge/authorized.txt
+*.log
+.smoke-tmp/
+.env
+.env.*
+*.tsbuildinfo
+.DS_Store
+.vscode/
+.idea/
+# Raw-data cache of natives:sync. Only the built index (natives-index.json) is
+# committed; the cache is a per-machine download.
+mcp-server/data/.cache-*
+# Full-quality demo recording (58 MB) stays local; the committed, compressed cut
+# lives at docs/demo.mp4. Keep the original for a GitHub-hosted README upload.
+/demo.mp4

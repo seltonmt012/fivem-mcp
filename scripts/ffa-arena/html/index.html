@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ffa-arena</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="root" class="hidden">
+        <section id="board">
+            <header id="board-head">
+                <div class="title">
+                    <span class="tag">FFA</span>
+                    <span id="arena-name">Arena</span>
+                </div>
+                <div id="goal" class="goal">First to 15 kills</div>
+            </header>
+
+            <div class="cols">
+                <span class="c-rank">#</span>
+                <span class="c-name">Player</span>
+                <span class="c-num">K</span>
+                <span class="c-num">D</span>
+                <span class="c-num">K/D</span>
+            </div>
+
+            <ul id="rows"></ul>
+
+            <div id="empty" class="empty">Waiting for players…</div>
+        </section>
+
+        <div id="protection" class="pill hidden">SPAWN PROTECTION</div>
+
+        <div id="dead" class="center hidden">
+            <div class="dead-title">ELIMINATED</div>
+            <div class="dead-sub">Respawning in <span id="dead-count">0.0</span>s</div>
+            <div class="dead-bar"><i id="dead-fill"></i></div>
+        </div>
+
+        <div id="banner" class="center hidden">
+            <div id="banner-title" class="banner-title"></div>
+            <div id="banner-sub" class="banner-sub"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

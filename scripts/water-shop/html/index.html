@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Water Shop</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="scrim" id="scrim" hidden>
+        <section class="shop" role="dialog" aria-modal="true" aria-labelledby="shopTitle">
+
+            <header class="shop__head">
+                <div class="brand">
+                    <span class="brand__mark" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false">
+                            <path d="M12 2.6c3.9 4.6 6.2 8 6.2 10.9A6.2 6.2 0 0 1 12 19.7a6.2 6.2 0 0 1-6.2-6.2C5.8 10.6 8.1 7.2 12 2.6Z"/>
+                        </svg>
+                    </span>
+                    <div class="brand__text">
+                        <h1 class="brand__title" id="shopTitle">24/7 Hydration</h1>
+                        <p class="brand__sub" id="shopLocation"></p>
+                    </div>
+                </div>
+
+                <div class="head__aside">
+                    <div class="wallet">
+                        <span class="wallet__label" id="walletLabel">Cash</span>
+                        <span class="wallet__value" id="walletValue">$0</span>
+                    </div>
+                    <button class="iconbtn" id="closeBtn" type="button" aria-label="Close shop">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M6 6l12 12M18 6L6 18"/>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <div class="shop__body">
+                <div class="catalog" role="radiogroup" aria-labelledby="catalogTitle">
+                    <h2 class="section__title" id="catalogTitle">Water</h2>
+                    <div class="catalog__grid" id="catalogGrid"></div>
+                </div>
+
+                <aside class="checkout" aria-labelledby="checkoutTitle">
+                    <h2 class="section__title" id="checkoutTitle">Order</h2>
+
+                    <div class="checkout__inner" id="checkoutInner">
+                        <p class="checkout__empty" id="checkoutEmpty">Pick something from the shelf.</p>
+
+                        <div class="order" id="order" hidden>
+                            <div class="order__head">
+                                <span class="order__art" id="orderArt" aria-hidden="true"></span>
+                                <div>
+                                    <p class="order__label" id="orderLabel"></p>
+                                    <p class="order__detail" id="orderDetail"></p>
+                                </div>
+                            </div>
+
+                            <div class="stepper">
+                                <span class="stepper__label" id="qtyLabel">Quantity</span>
+                                <div class="stepper__controls">
+                                    <button class="stepper__btn" id="qtyMinus" type="button" aria-label="One fewer">&minus;</button>
+                                    <span class="stepper__value" id="qtyValue" role="status" aria-live="polite">1</span>
+                                    <button class="stepper__btn" id="qtyPlus" type="button" aria-label="One more">+</button>
+                                </div>
+                            </div>
+
+                            <dl class="totals">
+                                <div class="totals__row">
+                                    <dt>Unit price</dt>
+                                    <dd id="unitPrice"></dd>
+                                </div>
+                                <div class="totals__row">
+                                    <dt>In your inventory</dt>
+                                    <dd id="ownedCount"></dd>
+                                </div>
+                                <div class="totals__row totals__row--sum">
+                                    <dt>Total</dt>
+                                    <dd id="totalPrice"></dd>
+                                </div>
+                            </dl>
+
+                            <button class="buy" id="buyBtn" type="button">
+                                <span id="buyLabel">Buy</span>
+                            </button>
+                            <p class="hint" id="buyHint"></p>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            <footer class="shop__foot">
+                <span><kbd>Esc</kbd> to leave the counter</span>
+                <span class="foot__sep" aria-hidden="true"></span>
+                <span id="stockNote"></span>
+            </footer>
+
+        </section>
+
+        <div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

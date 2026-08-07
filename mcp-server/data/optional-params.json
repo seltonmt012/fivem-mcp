@@ -1,0 +1,8 @@
+{
+  "//": "Minimum required argument counts for natives whose trailing parameters are optional in practice. The reference lists every parameter as required; each entry here overrides the computed minimum so the idiomatic short call raises no arity warning. Curated by hand; add a name only when the short form is documented or verified in-game.",
+  "GetEntityCoords": 1,
+  "SetEntityCoords": 4,
+  "GetGroundZFor_3dCoord": 3,
+  "GetVehiclePedIsIn": 1,
+  "SetVehicleOnGroundProperly": 1
+}

@@ -1,0 +1,69 @@
+{
+  "name": "fivem-mcp",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "MCP server that bridges Claude to a FiveM client resource over a local WebSocket NUI bridge",
+  "license": "MIT",
+  "author": "juliantsu",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juliantsu/fivem-mcp.git",
+    "directory": "mcp-server"
+  },
+  "homepage": "https://github.com/juliantsu/fivem-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/juliantsu/fivem-mcp/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "modelcontextprotocol",
+    "fivem",
+    "cfx",
+    "gta5",
+    "claude",
+    "claude-code",
+    "lua"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "fivem-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "data/natives-index.json",
+    "data/optional-params.json",
+    "fivem-mcp.config.example.json",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm test",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && node scripts/check-natives.mjs && node scripts/check-resource.mjs && node scripts/check-memory.mjs && node scripts/smoke-test.mjs",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "mock": "node scripts/mock-nui.mjs",
+    "smoke": "npm run build && node scripts/smoke-test.mjs",
+    "check:resource": "node scripts/check-resource.mjs",
+    "check:memory": "node scripts/check-memory.mjs",
+    "check:natives": "npm run build && node scripts/check-natives.mjs",
+    "natives:sync": "node scripts/sync-natives.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "luaparse": "^0.3.1",
+    "socket.io-client": "^4.8.3",
+    "ws": "^8.21.2",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/ws": "^8.5.13",
+    "socket.io": "^4.8.3",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

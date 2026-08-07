@@ -1,0 +1,80 @@
+{
+  "host": "127.0.0.1",
+  "port": 39271,
+  "tokenFile": "../fivem-mcp-bridge/bridge.token",
+  "allowedResources": [],
+  "allowNoOrigin": false,
+  "requestTimeoutMs": 5000,
+  "rateLimit": {
+    "commandsPerMinute": 120
+  },
+  "clientLog": {
+    "enabled": true,
+    "directory": null,
+    "defaultLines": 20,
+    "captureOnExecute": true
+  },
+  "crashes": {
+    "enabled": true,
+    "directory": null,
+    "maxCrashes": 10
+  },
+  "code": {
+    "enabled": true,
+    "maxBytes": 16384,
+    "defaultTimeoutMs": 10000
+  },
+  "natives": {
+    "enabled": true,
+    "mode": "strict",
+    "probeClient": true
+  },
+  "commands": {
+    "mode": "denylist",
+    "denylist": ["quit", "exit", "connect", "disconnect", "loadlevel"],
+    "allowlist": []
+  },
+  "screenshot": {
+    "enabled": true,
+    "processNames": ["FiveM_*GTAProcess", "FiveM_GTAProcess", "FiveM_b*", "FiveM"],
+    "maxWidth": 1280,
+    "format": "jpeg",
+    "quality": 80,
+    "timeoutMs": 15000,
+    "saveDirectory": null,
+    "fallbackToPrimary": true
+  },
+  "txAdmin": {
+    "enabled": false,
+    "url": "http://127.0.0.1:40120",
+    "username": null,
+    "passwordFile": "../.fivem-mcp/txadmin.password",
+    "captureSettleMs": 250,
+    "captureWaitMs": 1200,
+    "connectTimeoutMs": 8000,
+    "defaultReadBytes": 8192,
+    "commands": {
+      "mode": "denylist",
+      "denylist": ["quit"],
+      "allowlist": []
+    },
+    "protectedResources": ["fivem-mcp-bridge"]
+  },
+  "launch": {
+    "enabled": true,
+    "executablePath": null,
+    "defaultAddress": null,
+    "allowedAddresses": [],
+    "processNames": ["FiveM.exe", "FiveM_*GTAProcess.exe", "FiveM_b*.exe"],
+    "probeTimeoutMs": 5000
+  },
+  "serverEval": {
+    "enabled": false,
+    "gameEndpoint": "127.0.0.1:30120",
+    "defaultTimeoutMs": 10000
+  },
+  "nui": {
+    "devtoolsEndpoint": "127.0.0.1:13172",
+    "timeoutMs": 8000
+  }
+}

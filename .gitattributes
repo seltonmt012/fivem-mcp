@@ -1,0 +1,3 @@
+# Normalize line endings in the repository to LF; checkout uses the platform
+# default. Keeps diffs clean once Windows and Linux contributors mix.
+* text=auto
