@@ -96,8 +96,14 @@ Two files persist what sessions learn, split by portability:
 | `fivem_read_log` | Tail client log; `filter` is applied before the tail, so it digs deep |
 | `fivem_screenshot` | Captures the monitor the game is on; look at the image, don't just take it |
 | `fivem_native_info` | Native lookup by name/hash/keywords, probes the client for existence |
+| `fivem_check_resource` | Lints a resource folder on disk — syntax plus side-aware native check; run after every edit, **before** restarting |
 | `fivem_server_command` | txAdmin console command (`ensure`/`restart`/`refresh`); no ack — captured output is the only feedback |
 | `fivem_server_console` | Server console ring buffer; pass back `Next cursor` to read only what's new |
+| `fivem_server_run_code` | Lua on the live **server**; runs in the bridge's own Lua state — reach other resources via `exports`/events. Opt-in on both sides; absent unless `serverEval` is enabled |
+| `fivem_nui_frames` | Lists NUI (CEF) frames and the resource owning each — the starting point for the other `fivem_nui_*` tools |
+| `fivem_nui_snapshot` | DOM outline of a resource's NUI, optionally with a screenshot of just the UI layer — the way to *look* at a UI, use it before clicking |
+| `fivem_nui_click` | Clicks by CSS selector through the page's real event handlers; a missed selector answers with what *is* clickable |
+| `fivem_nui_eval` | JavaScript in the NUI page; `world:"main"` (default) can call the page's own functions, promises are awaited |
 | `fivem_launch` | Start game + connect; never guess an address; cold start 60–120 s |
 | `fivem_read_crash` | Crash dumps + correlated reason; works with the game dead; pair `section` with `filter` |
 
